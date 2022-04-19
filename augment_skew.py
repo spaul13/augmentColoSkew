@@ -11,20 +11,16 @@ destDir = parent + "_" + sys.argv[1] + "/"
 os.system("mkdir " + destDir)
 skew =  skew/100
 
-def checkColor(img):
-	image = cv2.imread(img)
-	if image.any() != None:
-		if len(image.shape)==3:
-			return True
-		else:
-			return False
-	else:
-		print("can't find " + img)
 
-def convertGrayScale(img, dest):
-	img = Image.open(img)
+def convertGrayScale(image, dest):
+	img = Image.open(image)
 	imgGray = img.convert('L')
 	imgGray.save(dest)
+
+def convertGrayScaleCV(image, dest):
+	img = cv2.imread(image)
+	grayscale = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	cv2.imwrite(dest, grayscale)
 
 if selective == "partial":
 	selected = ["automobile", "cat", "horse", "truck", "airplane"]
@@ -34,9 +30,6 @@ elif selective =="all":
 
 for l in labelList:
 	imglist = glob.glob(parent + "/" + l + "/*.jpg")
-	#for img in imglist:
-	#	if not checkColor(img):
-	#		print(img)
 	if l in selected:
 		selectNum = int(len(imglist)*skew)
 	else:
@@ -58,4 +51,3 @@ for l in labelList:
 	for p in piccolorlist:
 		dest = destDir + l + "/" + p.split("/")[-1]
 		os.system("scp " + p + " " + dest)
-
