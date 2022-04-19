@@ -42,7 +42,7 @@ for l in labelList:
 	else:
 		selectNum = int(len(imglist)*(1-skew))
 		 
-	if mode == " random":
+	if mode == "random":
 		picgraylist = random.sample(imglist, selectNum)
 	elif mode == "fixed":
 		picgraylist = imglist[0:selectNum]
